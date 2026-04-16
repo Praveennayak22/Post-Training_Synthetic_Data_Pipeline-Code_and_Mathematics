@@ -42,16 +42,22 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 ## Project Summary
 
-This project implements a **7-step math data pipeline** built using workflows inspired by NVIDIA NeMo Skills:
+This project implements a **7-step math data pipeline** built using workflows inspired by NVIDIA NeMo Skills. The **core innovation** is **synthetic math question generation** powered by multiple LLMs (Kimi-K2.5, DeepSeek-V3.2, GLM-5-FP8, Minimax-M2.5, GPT-OSS-120B).
+
+### Pipeline Stages
+
+**Evaluation Stages (Steps 1-4):**  
 1. Prepare dataset from HuggingFace (`step1_prepare_data.py`)
-2. Generate answers using selected model APIs (`step2_generate.py`)
+2. Generate answers using selected model APIs (`step2_generate.py`)  
 3. Postprocess/extract/fix answer format (`step3_postprocess.py`)
 4. Evaluate and summarize performance (`step4_evaluate.py`)
-5. Generate original synthetic math questions (`step5_generate_original.py`)
-6. Generate dataset-inspired synthetic questions (`step6_generate_from_datasets.py`)
+
+**Synthetic Generation Stages (Steps 5-7) — KEY DIFFERENTIATOR:**  
+5. **Generate original synthetic math questions** (`step5_generate_original.py`) — creates novel problems via LLM prompting
+6. **Generate dataset-inspired synthetic questions** (`step6_generate_from_datasets.py`) — augments existing datasets with model-generated variants
 7. Convert external datasets to common schema (`step7_convert_schema.py`)
 
-The pipeline supports multi-model comparison and result export to JSONL + Parquet + CSV.
+The pipeline supports **5-model comparison** (Kimi, DeepSeek, GLM, Minimax, GPT-OSS) across **4 math datasets** and exports results to JSONL + Parquet + CSV formats.
 
 ---
 
@@ -154,6 +160,45 @@ python step6_generate_from_datasets.py --dataset netop/TeleMath --limit 200 --ou
 
 ```bash
 python step7_convert_schema.py --dataset zwhe99/DeepMath-103K --limit 2000
+```
+
+---
+
+## 🎯 KEY ACHIEVEMENT: Synthetic Math Question Generation
+
+### Generated Datasets (Team 2 Innovation)
+
+Our pipeline generates **novel synthetic math questions** using multiple state-of-the-art LLMs:
+
+| Generated Dataset | Size | Purpose |
+|---|---|---|
+| `generated/generated_math.jsonl` | 400 problems | Original questions from Kimi-K2.5 + other models |
+| `generated/generated_telemath_aug.jsonl` | Multi-variant | Dataset-inspired augmentation from TeleMath |
+| And more... | | Extended via Step 6 (dataset-inspired variants) |
+
+### What Makes This Unique
+
+- **Kimi-K2.5** generates contextually-aware, diverse math problems
+- **Model Diversity**: Compare generation quality across 5 LLMs
+- **Quality Assurance**: In `results/`, you'll see Kimi evaluation results:
+  - `math_kimi-k2.5_LIMO_200.jsonl` — Kimi evaluated on GAIR/LIMO (817 problems)
+  - `math_kimi-k2.5_s1K_200.jsonl` — Kimi on simplescaling/s1K (1000 problems)
+  - `math_kimi-k2.5_TheoremQA_200.jsonl` — Kimi on TIGER-Lab/TheoremQA (800 problems)  
+  - `math_kimi-k2.5_tw-math-reasoning-2k_200.jsonl` — Kimi on tw-math-reasoning-2k (2000 problems)
+
+All in both **JSONL** (human-readable) and **Parquet** (efficient columnar) formats.
+
+### Quick View Generated Questions
+
+```bash
+# View first 5 generated questions
+head -5 generated/generated_math.jsonl | python -m json.tool
+
+# View Kimi evaluation results
+head -3 results/math_kimi-k2.5_LIMO_200.jsonl | python -m json.tool
+
+# See performance Summary
+cat summary.csv
 ```
 
 ---
