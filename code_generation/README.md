@@ -727,9 +727,26 @@ This pipeline was developed as part of the Post-Training Synthetic Data generati
 - **Evol-Instruct** — Difficulty scaling methodology
 - **Math-Verify** — Verification techniques applied to code validation
 
-## License
+## 📄 License
 
-[Specify license: MIT, Apache-2.0, etc.]
+**Code**: MIT License — See [LICENSE](../LICENSE) file  
+**Generated Datasets**: CC0 1.0 Universal (Public Domain)
+
+This pipeline code is licensed under the **MIT License**. The synthetic datasets generated are released under **CC0 1.0 Universal** (public domain).
+
+### Usage Rights
+
+✅ **You may:**
+- Use this code for any purpose (commercial, academic, personal)
+- Generate synthetic datasets and use them freely  
+- Modify and redistribute with attribution
+- Use generated datasets for training any model
+
+❌ **You may not:**
+- Hold the authors liable for any issues or damages
+- Remove attribution from modified versions
+
+See [LICENSE](../LICENSE) for full license text.
 
 ## Support
 
