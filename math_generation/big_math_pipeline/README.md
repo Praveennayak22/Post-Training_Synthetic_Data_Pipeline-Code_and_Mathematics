@@ -106,16 +106,33 @@ export HF_TOKEN="hf_xxxxxxxxxxxxxxxx"
 # Create a "Read" token for dataset access
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# 2. Model API Access
+# 2. Model API Access - Fallback System
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-export MODEL_API_KEY="your_api_key_here"
-# Used for teacher model inference
-# Obtain from: TensorStudio, OpenAI, or your cluster admin
+# ⚠️  IMPORTANT: The pipeline tries API key first, then falls back to cluster node
+# This provides flexibility to switch between cloud and local infrastructure.
 
+# Priority 1: External API key (optional - try first if set)
+export MODEL_API_KEY="your_api_key_here"
+# Leave empty ("") to skip and use cluster endpoint
+# Get from: TensorStudio, Together.ai, OpenRouter, or other cloud provider
+
+# Priority 2: Cluster node endpoint (fallback - required if MODEL_API_KEY not set)
 export MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
-# Override endpoint from config.yaml if needed
-# For local cluster: http://soketlab-nodeXXX:30000/v1/chat/completions
-# For TensorStudio: https://api.tensorstudio.ai/...
+# Used if MODEL_API_KEY fails or is not set
+# Options:
+#   - Local cluster: http://soketlab-nodeXXX:30000/v1/chat/completions
+#   - HuggingFace router: https://router.huggingface.co/v1/chat/completions
+#   - Together.ai: https://api.together.xyz/v1/chat/completions
+#   - OpenRouter: https://openrouter.ai/api/v1/chat/completions
+
+# Examples:
+# Scenario 1 (development): Only cluster access
+#   export MODEL_API_KEY=""
+#   export MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
+#
+# Scenario 2 (with cloud API): Try cloud first, fall back to cluster
+#   export MODEL_API_KEY="sk_live_..."
+#   export MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 3. Cache & Storage

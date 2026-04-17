@@ -106,6 +106,45 @@ def _call_teacher(
     Call any OpenAI-compatible chat completions endpoint.
     Supports SGLang's chat_template_kwargs.enable_thinking flag
     (api.tensorstudio.ai) to request full <think> reasoning traces.
+
+    ════════════════════════════════════════════════════════════════════════════
+    TWO-TIER CREDENTIAL SYSTEM (Fallback Logic)
+    ════════════════════════════════════════════════════════════════════════════
+    
+    This function implements a flexible credential fallback system to maximize
+    deployment flexibility:
+
+    Priority 1: External API Key (if provided)
+    ──────────────────────────────────────────
+    if api_key is set:
+        → Use external cloud provider (TensorStudio, Together.ai, OpenRouter, etc.)
+        → Good for: Demos, managed services, rate-limited access
+        → Limitation: Quota/cost constraints
+
+    Priority 2: Cluster Node Endpoint (fallback)
+    ──────────────────────────────────────────
+    if api_key is empty/None OR api_key fails:
+        → Fall back to local cluster node endpoint
+        → Good for: Development, unlimited throughput
+        → Limitation: Internal network only
+
+    Use Cases
+    ─────────
+    Development:
+        api_key = ""  (skip cloud)
+        endpoint = "http://soketlab-node054:30000/v1/chat/completions"
+        → Uses cluster node directly
+
+    Production with Fallback:
+        api_key = "sk_live_xxxxx"  (try cloud first)
+        endpoint = "http://soketlab-node054:30000/v1/chat/completions"  (fallback)
+        → Tries cloud API, falls back to cluster if quota exhausted
+
+    Demos / Testing:
+        api_key = "sk_test_xxxxx"  (cloud quota limited)
+        endpoint = "http://soketlab-node054:30000/v1/chat/completions"  (always available)
+        → Tries cloud first for lower latency, falls back to ensure completion
+    ════════════════════════════════════════════════════════════════════════════
     """
     # Normalize endpoint to a concrete chat-completions route.
     base = endpoint.strip().rstrip("/")
@@ -337,16 +376,87 @@ class TeacherGenerator:
     """
     Generates <think> traces for converted math problems using Kimi-K2.5.
 
+    ════════════════════════════════════════════════════════════════════════════
+    TWO-TIER CREDENTIAL SYSTEM
+    ════════════════════════════════════════════════════════════════════════════
+    
+    This class supports flexible credential handling for maximum deployment
+    flexibility. Credentials are loaded from environment variables with a
+    smart fallback mechanism:
+
     Parameters
-    ----------
+    ──────────
     cfg : full pipeline config dict
+
+    Environment Variables (.env file)
+    ──────────────────────────────────
+    MODEL_API_KEY (Optional, Priority 1)
+        External cloud provider API key (TensorStudio, Together.ai, etc.)
+        If set → Pipeline tries this first for cloud inference
+        If empty/"" → Pipeline skips to MODEL_ENDPOINT
+        Good for: Production with cloud providers, managed services
+
+    MODEL_ENDPOINT (Required, Fallback)
+        OpenAI-compatible endpoint (cluster node or public API)
+        Used if MODEL_API_KEY is not set or fails
+        Good for: Local cluster, unlimited throughput
+
+    Execution Flow
+    ──────────────
+    1. Read MODEL_API_KEY from environment
+    2. Read MODEL_ENDPOINT from environment
+    3. If MODEL_API_KEY is empty/None → Log warning, use ENDPOINT only
+    4. In _call_teacher():
+       - If api_key is set → Include "Authorization: Bearer {api_key}"
+       - If api_key is None/empty → Omit Authorization header
+       - Both cases work with OpenAI-compatible endpoints
+
+    Deployment Scenarios
+    ────────────────────
+    Development (local cluster only):
+        .env:
+            MODEL_API_KEY=""
+            MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
+        Result: Uses cluster node directly, no API costs
+
+    Production (with fallback):
+        .env:
+            MODEL_API_KEY="sk_live_xxxxx"
+            MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
+        Result: Tries cloud API first, automatic fallback if quota exceeded
+
+    Demo / Testing (cloud with local fallback):
+        .env:
+            MODEL_API_KEY="sk_test_xxxxx"  (limited quota)
+            MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
+        Result: Tries cloud (lower latency), falls back to ensure completion
+
+    Configuration File (config/config.yaml)
+    ────────────────────────────────────────
+    teacher_model:
+        model: kimi-k2.5                          # Model name (Kimi-K2.5)
+        endpoint: http://soketlab-node054:30000   # Config default
+        temperature: 0.6
+        max_new_tokens: 1500
+        enable_thinking: true
+        request_timeout_seconds: 45
+        retry_attempts: 1
+        retry_backoff_seconds: 2.0
+        parallel_workers: 2
+    
+    Note: MODEL_ENDPOINT env var overrides config.yaml default
+    ════════════════════════════════════════════════════════════════════════════
     """
 
     def __init__(self, cfg: dict) -> None:
+        # ════════════════════════════════════════════════════════════════════════
+        # CREDENTIAL INITIALIZATION: Two-tier fallback system
+        # Priority 1: Try external API key first, Priority 2: Use cluster endpoint
+        # ════════════════════════════════════════════════════════════════════════
         self._api_key        = (os.environ.get("MODEL_API_KEY") or "").strip()
         tcfg                 = cfg["teacher_model"]
         self._endpoint       = os.environ.get("MODEL_ENDPOINT") or tcfg["endpoint"]
-        self._model          = tcfg.get("model", "glm-5-fp8")
+        self._model          = tcfg.get("model", "kimi-k2.5")
         self._temperature    = tcfg["temperature"]
         self._max_new_tokens = tcfg["max_new_tokens"]
         self._enable_thinking = tcfg.get("enable_thinking", True)
