@@ -53,7 +53,7 @@ SOURCE_TAG   = DATASET_NAME.split("/")[-1]   # e.g. TeleMath, Omni-MATH
 OUTFILE      = args.outfile or f"generated_from_{SOURCE_TAG}.jsonl"
 
 # ── KIMI CONFIG ───────────────────────────────────────────────────────────
-KIMI_URL = "http://soketlab-node054:30000/v1/chat/completions"
+KIMI_URL = "http://your-cluster-node:xxxx/v1/chat/completions"
 HEADERS  = {"Content-Type": "application/json"}
 
 # ── DIFFICULTY ────────────────────────────────────────────────────────────

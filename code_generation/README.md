@@ -177,7 +177,7 @@ export TENSORSTUDIO_API_KEY="your_api_key_here"
 
 export LLM_URL="https://api.tensorstudio.ai/sglang/v1/chat/completions"
 # Or for internal cluster:
-# export LLM_URL="http://soketlab-node049:30000/v1/chat/completions"
+# export LLM_URL="http://your-cluster-node:xxxx/v1/chat/completions"
 
 export LLM_MODEL="openai/gpt-oss-120b"
 # Options: openai/gpt-oss-120b, other LLM names supported by endpoint
@@ -185,7 +185,7 @@ export LLM_MODEL="openai/gpt-oss-120b"
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 3. Generator Model — Variant Creator (Internal Cluster Node)
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-export GEN_LLM_URL="http://soketlab-node049:30000/v1/chat/completions"
+export GEN_LLM_URL="http://your-cluster-node:xxxx/v1/chat/completions"
 # For direct cluster access (no tunnel needed)
 # Generates diverse problem variants from seeds (Stage 1)
 
@@ -240,7 +240,7 @@ echo $TENSORSTUDIO_API_KEY    # Should print key (careful: do not commit!)
 python -c "import dotenv; print('✓ dotenv available')"
 
 # Test cluster connectivity (if using internal cluster)
-curl -X GET http://soketlab-node049:30000/health
+curl -X GET http://your-cluster-node:xxxx/health
 
 # Test HuggingFace token
 huggingface-cli whoami
@@ -633,9 +633,9 @@ export HF_TOKEN="hf_xxxxxxxxxxxx"
 **Issue**: "Error: LLM_URL unreachable"
 ```bash
 # Solution: Check cluster connection
-curl -X GET http://soketlab-node049:30000/health
+curl -X GET http://your-cluster-node:xxxx/health
 # Or set up SSH tunnel if needed
-ssh -L 30000:soketlab-node049:30000 cluster.server.com
+ssh -L xxxx:your-cluster-node:xxxx your-gateway.com
 ```
 
 **Issue**: "Error: CUDA out of memory"

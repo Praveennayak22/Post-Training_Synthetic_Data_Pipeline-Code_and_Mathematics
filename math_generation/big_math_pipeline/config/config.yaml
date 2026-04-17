@@ -118,7 +118,7 @@ format_converter:
 teacher_model:
   model: kimi-k2.5          # Kimi K2.5 model for reasoning traces
   # Endpoint from .env MODEL_ENDPOINT takes priority over this value
-  endpoint: http://soketlab-node054:30000/v1/chat/completions
+  endpoint: http://your-cluster-node:xxxx/v1/chat/completions
   temperature: 0.6
   max_new_tokens: 1500      # reduced from 3800 â€” actual traces ~300-600 tokens; speeds up API
   max_new_tokens_cap: 1500  # full teacher generation cap

@@ -47,7 +47,7 @@ import threading
 import requests
 
 # ── Model config ───────────────────────────────────────────────────────────────
-GEN_MODEL_URL  = os.environ.get("GEN_LLM_URL",   "http://soketlab-node049:30000/v1/chat/completions")
+GEN_MODEL_URL  = os.environ.get("GEN_LLM_URL",   "http://your-cluster-node:xxxx/v1/chat/completions")
 GEN_MODEL_NAME = os.environ.get("GEN_LLM_MODEL", "deepseek-v3.2")
 
 MODEL_URL       = os.environ.get("LLM_URL",   "https://api.tensorstudio.ai/sglang/v1/chat/completions")

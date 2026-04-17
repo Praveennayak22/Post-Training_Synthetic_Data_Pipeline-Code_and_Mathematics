@@ -132,17 +132,17 @@ def _call_teacher(
     ─────────
     Development:
         api_key = ""  (skip cloud)
-        endpoint = "http://soketlab-node054:30000/v1/chat/completions"
+        endpoint = "http://your-cluster-node:xxxx/v1/chat/completions"
         → Uses cluster node directly
 
     Production with Fallback:
         api_key = "sk_live_xxxxx"  (try cloud first)
-        endpoint = "http://soketlab-node054:30000/v1/chat/completions"  (fallback)
+        endpoint = "http://your-cluster-node:xxxx/v1/chat/completions"  (fallback)
         → Tries cloud API, falls back to cluster if quota exhausted
 
     Demos / Testing:
         api_key = "sk_test_xxxxx"  (cloud quota limited)
-        endpoint = "http://soketlab-node054:30000/v1/chat/completions"  (always available)
+        endpoint = "http://your-cluster-node:xxxx/v1/chat/completions"  (always available)
         → Tries cloud first for lower latency, falls back to ensure completion
     ════════════════════════════════════════════════════════════════════════════
     """
@@ -416,26 +416,26 @@ class TeacherGenerator:
     Development (local cluster only):
         .env:
             MODEL_API_KEY=""
-            MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
+            MODEL_ENDPOINT="http://your-cluster-node:xxxx/v1/chat/completions"
         Result: Uses cluster node directly, no API costs
 
     Production (with fallback):
         .env:
             MODEL_API_KEY="sk_live_xxxxx"
-            MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
+            MODEL_ENDPOINT="http://your-cluster-node:xxxx/v1/chat/completions"
         Result: Tries cloud API first, automatic fallback if quota exceeded
 
     Demo / Testing (cloud with local fallback):
         .env:
             MODEL_API_KEY="sk_test_xxxxx"  (limited quota)
-            MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
+            MODEL_ENDPOINT="http://your-cluster-node:xxxx/v1/chat/completions"
         Result: Tries cloud (lower latency), falls back to ensure completion
 
     Configuration File (config/config.yaml)
     ────────────────────────────────────────
     teacher_model:
         model: kimi-k2.5                          # Model name (Kimi-K2.5)
-        endpoint: http://soketlab-node054:30000   # Config default
+        endpoint: http://your-cluster-node:xxxx   # Config default
         temperature: 0.6
         max_new_tokens: 1500
         enable_thinking: true

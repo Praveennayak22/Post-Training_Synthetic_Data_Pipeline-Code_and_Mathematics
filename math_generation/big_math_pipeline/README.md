@@ -117,10 +117,10 @@ export MODEL_API_KEY="your_api_key_here"
 # Get from: TensorStudio, Together.ai, OpenRouter, or other cloud provider
 
 # Priority 2: Cluster node endpoint (fallback - required if MODEL_API_KEY not set)
-export MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
+export MODEL_ENDPOINT="http://your-cluster-node:xxxx/v1/chat/completions"
 # Used if MODEL_API_KEY fails or is not set
 # Options:
-#   - Local cluster: http://soketlab-nodeXXX:30000/v1/chat/completions
+#   - Local cluster: http://your-cluster-node:xxxx/v1/chat/completions
 #   - HuggingFace router: https://router.huggingface.co/v1/chat/completions
 #   - Together.ai: https://api.together.xyz/v1/chat/completions
 #   - OpenRouter: https://openrouter.ai/api/v1/chat/completions
@@ -128,11 +128,11 @@ export MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
 # Examples:
 # Scenario 1 (development): Only cluster access
 #   export MODEL_API_KEY=""
-#   export MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
+#   export MODEL_ENDPOINT="http://your-cluster-node:xxxx/v1/chat/completions"
 #
 # Scenario 2 (with cloud API): Try cloud first, fall back to cluster
 #   export MODEL_API_KEY="sk_live_..."
-#   export MODEL_ENDPOINT="http://soketlab-node054:30000/v1/chat/completions"
+#   export MODEL_ENDPOINT="http://your-cluster-node:xxxx/v1/chat/completions"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 3. Cache & Storage
@@ -153,7 +153,7 @@ echo "MODEL_ENDPOINT: $MODEL_ENDPOINT"  # Show endpoint
 huggingface-cli whoami                  # Should show username
 
 # Test cluster endpoint (if using internal node)
-curl -X GET http://soketlab-node054:30000/health
+curl -X GET http://your-cluster-node:xxxx/health
 ```
 
 ## Configuration
@@ -198,7 +198,7 @@ evol_instruct:
 
 teacher_model:
   model: kimi-k2.5                 # Reasoning trace generator
-  endpoint: http://soketlab-node054:30000/v1/chat/completions
+  endpoint: http://your-cluster-node:xxxx/v1/chat/completions
   temperature: 0.6                 # Determinism (lower = more stable)
   max_new_tokens: 1500             # Max trace length
   parallel_workers: 2              # Concurrent API requests

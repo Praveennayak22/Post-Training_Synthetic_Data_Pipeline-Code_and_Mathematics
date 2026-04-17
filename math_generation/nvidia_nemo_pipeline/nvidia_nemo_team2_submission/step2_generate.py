@@ -26,12 +26,12 @@ MODEL_NAME = args.model
 
 # ── model registry ────────────────────────────────────────────────────────
 MODELS = {
-    "glm-5-fp8":     {"url": "http://soketlab-node064:30000/v1/chat/completions", "key": None,    "external": False},
-    "minimax-m2.5":  {"url": "http://soketlab-node043:30000/v1/chat/completions", "key": None,    "external": False},
-    "kimi-k2.5":     {"url": "http://soketlab-node019:30000/v1/chat/completions", "key": None,    "external": False},
-    "deepseek-v3.2": {"url": "http://soketlab-node017:30000/v1/chat/completions", "key": None,    "external": False},
-    "gpt-oss-120b":  {"url": "http://172.17.99.11:30000/v1/chat/completions",
-                      "key": "AVTXOTWZab9v8WExZMNcGXdCFPCmon4LQPMWP6iS32w2",                                                           "external": False},
+    "glm-5-fp8":     {"url": "http://your-cluster-node:xxxx/v1/chat/completions", "key": None,    "external": False},
+    "minimax-m2.5":  {"url": "http://your-cluster-node:xxxx/v1/chat/completions", "key": None,    "external": False},
+    "kimi-k2.5":     {"url": "http://your-cluster-node:xxxx/v1/chat/completions", "key": None,    "external": False},
+    "deepseek-v3.2": {"url": "http://your-cluster-node:xxxx/v1/chat/completions", "key": None,    "external": False},
+    "gpt-oss-120b":  {"url": "http://your-cluster-node:xxxx/v1/chat/completions",
+                      "key": "your_api_key_here",                                                           "external": False},
 }
 
 SYSTEM_PROMPTS = {

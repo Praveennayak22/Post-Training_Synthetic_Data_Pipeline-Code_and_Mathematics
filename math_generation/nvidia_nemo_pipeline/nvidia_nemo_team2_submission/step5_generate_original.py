@@ -45,7 +45,7 @@ parser.add_argument("--difficulty", type=int, default=None,
 args = parser.parse_args()
 
 # ── KIMI CONFIG ───────────────────────────────────────────────────────────
-KIMI_URL = "http://soketlab-node054:30000/v1/chat/completions"
+KIMI_URL = "http://your-cluster-node:xxxx/v1/chat/completions"
 HEADERS  = {"Content-Type": "application/json"}
 
 # ── TOPICS & DIFFICULTY ───────────────────────────────────────────────────
