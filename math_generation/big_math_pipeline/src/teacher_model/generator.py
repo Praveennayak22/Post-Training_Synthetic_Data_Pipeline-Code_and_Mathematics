@@ -57,7 +57,7 @@ _FINAL_ANSWER_RE = re.compile(
 @dataclass
 class TracedSample:
     """
-    A problem with a DeepSeek-R1 reasoning trace attached.
+    A problem with a Kimi-K2.5 reasoning trace attached.
 
     Fields
     ------
@@ -335,7 +335,7 @@ def _extract_final_answer(text: str) -> str | None:
 
 class TeacherGenerator:
     """
-    Generates <think> traces for converted math problems using DeepSeek-R1.
+    Generates <think> traces for converted math problems using Kimi-K2.5.
 
     Parameters
     ----------

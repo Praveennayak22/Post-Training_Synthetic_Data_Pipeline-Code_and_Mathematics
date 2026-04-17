@@ -9,11 +9,11 @@ The pipeline transforms diverse math problem datasets into a unified, high-quali
 ```
 Step 1: Load seed data (NuminaMath-CoT, FineMath, S1K, etc.)
         ↓
-Step 2: Evol-Instruct difficulty scaling (generate harder variants)
+Step 2: Evol-Instruct difficulty scaling (Kimi-K2.5 mutations)
         ↓
 Step 3: MCQ → open-ended conversion (unify problem formats)
         ↓
-Step 4: DeepSeek-R1 teacher reasoning traces (generate <think> tokens)
+Step 4: Kimi-K2.5 teacher reasoning traces (generate <think> tokens)
         ↓
 Step 5: Math-Verify validation + rejection sampling (verify correctness)
         ↓

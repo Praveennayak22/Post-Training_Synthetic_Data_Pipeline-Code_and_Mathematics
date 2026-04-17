@@ -4,9 +4,9 @@ Math Synthetic Data Pipeline — top-level orchestrator.
 Runs all steps end-to-end (or a specified subset):
 
   Step 1  Load seed data (NuminaMath-CoT + FineMath)
-  Step 2  Evol-Instruct difficulty scaling
+  Step 2  Evol-Instruct difficulty scaling (Kimi-K2.5 mutations)
   Step 3  MCQ → open-ended conversion (Big-Math style)
-  Step 4  DeepSeek-R1 teacher <think> trace generation
+  Step 4  Kimi-K2.5 teacher <think> trace generation
   Step 5  Math-Verify answer validation + rejection sampling
   Step 6  Reasoning-level tagging (0–4)
   Step 7  Serialise final dataset to Parquet
